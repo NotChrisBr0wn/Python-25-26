@@ -35,9 +35,9 @@ Binário -> Decimal
 Exercicio 2:
 
 Início
-|	Escrever("Digite as coordenadas do ponto 1 (x1,y1): "
-| 	Ler(x1,y1)
-| 	Escrever("Digite as coordenadas do ponto 2 (x2,y2): "
+|	Escrever("Digite as coordenadas do ponto 1 (x1,y1)): "
+| 	Ler(x1,y1)W
+| 	Escrever("Digite as coordenadas do ponto 2 (x2,y2))S: "
 | 	Ler(x2,y2)
 |
 |    dx = x2-x1 
