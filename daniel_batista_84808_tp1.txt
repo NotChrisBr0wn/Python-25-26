@@ -1,0 +1,113 @@
+Exercicio 1:
+
+Decimal -> Binário
+101 = 5
+1101 = 13
+120 = Já está em decimal
+
+101 -> 1*2^0 + 0*2^1 + 1*2^2 = 5 
+
+1101 -> 1*2^0 + 0*2^1 + 1*2^2 + 1*2^3 = 13
+
+Binário -> Decimal
+120 = 1111000
+255 = 11111111
+1 = 1
+
+120/2=60/2=30/2=15/2=7/2=3/2=1/2=0
+      %0   %0   %0  %1  %1  %1  %1
+      
+255/2=127/2=63/2=31/2=15/2=7/2=3/2=1/2=0
+     %1    %1   %1   %1   %1  %1  %1  %1
+   
+1/2=0     
+   %1 
+   
+1001 + 001 = 1010
+
+1001
++001
+---- 
+1010
+
+00001001|11011101 =  2bytes e 16bits
+
+Exercicio 2:
+
+Início
+|	Escrever("Digite as coordenadas do ponto 1 (x1,y1): "
+| 	Ler(x1,y1)
+| 	Escrever("Digite as coordenadas do ponto 2 (x2,y2): "
+| 	Ler(x2,y2)
+|
+|    dx = x2-x1 
+|    dy = y2-y1 
+|	
+|	distancia = raiz((dx+dy)^2)
+|	Escrever ("A distância entre os dois pontos é: ", distância) 
+Fim
+
+Exercício 3
+
+1. Pedir a nota de Matemática ao utilizador
+2. Pedir a nota de Portguês
+3. Pedir a nota de Inglês
+4. Pedir a nota de Geografia
+5. Somar as notas e dividir por 4
+6. Mostrar a média das notas
+7. Se a média for superior a 9,5, imprime a mensagem "Aprovado"
+8. Senão, imprime a mensagem "Reprovado"
+
+Exercicio 4
+
+1. Pedir ao utilizador para introduzir um número inteiro
+2. Criar uma variável que guarde o resultado começando por 1
+3. Multiplicar a variável por cada número de 1 ao valor introduzido
+4. Mostrar o resultado do fatorial
+
+Exercício 5
+
+1. Pedir ao utilizador para introduzir um número inteiro
+2. Verificar quantos números entre 1 e o número introduzido deixam resto 0 ao fazer a divisão
+3. Se houver apenas dois divisores (1 e o número introduzido), o número é primo
+4. Senão, não é primo
+5. Mostrar se o número é primo ou não
+
+Exercício 6 
+
+1.Criar variáveis para guardar:
+	O nome do aluno com a melhor nota.
+	A melhor nota encontrada até o momento.
+	A soma de todas as notas.
+	O número de alunos inseridos.
+2.Pedir o nome do primeiro aluno.
+3.Enquanto o nome não for “STOP”:
+	-Pedir a nota do aluno.
+	-Somar essa nota ao total de notas.
+	-Aumentar o contador de alunos em 1.
+	-Verificar se essa nota é maior que a melhor nota registrada até agora:
+		-Se for, guardar essa nota como a melhor nota.
+		-Guardar o nome desse aluno como o melhor aluno.
+	-Pedir o próximo nome do aluno.
+4.Quando o nome for “STOP”, calcular a média das notas:
+	média = soma_das_notas/numero_alunos
+5.Mostrar:
+	Nome do melhor aluno
+	Melhor nota
+	Média da turma
+	
+Exercício 7
+
+1. Criar uma função para ler o maior algarismo
+2. Receber um número inteiro como entrada
+3. Separar os algarismos do número
+4. Comparar cada algarismo com o maior encontrado
+5. Quando não existirem mais algarismos, devoler o maior algarismo encontrado
+
+Exercício 8
+
+1. Receber um vetor e um valor a ser procurado
+2. Percorrer todos os valores do vetor do primeiro ao último
+3. Verificar se algum dos valores é o desejado 
+4. Se encontrar o número desejado, devolver a posição do elemento
+5. Se não encontrar, mostrar a mensagem "Valor não foi encontrado"
