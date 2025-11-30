@@ -2,16 +2,16 @@ import random
 import os
 
 # Carrega o tabuleiro do ficheiro txt
-def load_board():
-    board_path = os.path.join(os.path.dirname(__file__), "board.txt")
+def mostrar_tabuleiro():
+    tabuleiro = os.path.join(os.path.dirname(__file__), "tabuleiro.txt")
     try:
-        with open(board_path, "r", encoding="utf-8") as f:
+        with open(tabuleiro, "r", encoding="utf-8") as f:
             return f.read()
     except FileNotFoundError:
         return "Ficheiro do tabuleiro não encontrado!"
 
 # Tabuleiro do jogo
-BOARD_ASCII = load_board()
+BOARD_ASCII = mostrar_tabuleiro()
 
 def print_board():
     """Mostra o tabuleiro do ficheiro txt"""
@@ -31,11 +31,11 @@ def move_player(current_pos, dice_value):
 def check_special_squares(pos):
     """Verifica se o jogador caiu numa casa especial"""
     special_squares = {
-        6: ("PONTE!", 12),      # Ponte vai para 12
-        19: ("POÇO!", 0),       # Poço, perde turno
-        25: ("DADO!", 29),      # Dado, avança para 29
-        42: ("LABIRINTO!", 30), # Labirinto volta para 30
-        58: ("PRISÃO!", 0),     # Prisão, perde turno
+        6: ("PONTE!", 12),      
+        19: ("POÇO!", 0),      
+        25: ("DADO!", 29),     
+        42: ("LABIRINTO!", 30), 
+        58: ("PRISÃO!", 0),     
     }
     
     if pos in special_squares:
