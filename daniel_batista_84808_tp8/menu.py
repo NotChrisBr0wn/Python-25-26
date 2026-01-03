@@ -3,7 +3,6 @@ GAMES = [
     ("4 em Linha", "quatro_em_linha", "quatro_em_linha"),
     ("Jogo da Glória", "jogo_da_gloria", "jogo_da_gloria"),
     ("Jogo da Forca", "jogo_da_forca", "jogo_da_forca"),
-    ("Minesweeper", "minesweeper", "main_minesweeper"),
 ]
 
 
