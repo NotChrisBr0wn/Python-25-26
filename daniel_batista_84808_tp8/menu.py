@@ -1,8 +1,17 @@
+# Exemplo de lógica para o início do menu.py
+def carregar_sessao():
+    if os.path.exists("sessao.json"):
+        quer_continuar = input("Deseja continuar a sessão anterior? (s/n): ").lower()
+        if quer_continuar == 's':
+            # código para ler o ficheiro e carregar nomes/pontuações
+            pass
+
 GAMES = [
     ("Jogo do Galo", "jogo_do_galo", "jogo_do_galo"),
     ("4 em Linha", "quatro_em_linha", "quatro_em_linha"),
     ("Jogo da Glória", "jogo_da_gloria", "jogo_da_gloria"),
     ("Jogo da Forca", "jogo_da_forca", "jogo_da_forca"),
+    ("Minesweeper", "minesweeper", "main_minesweeper"),
 ]
 
 
