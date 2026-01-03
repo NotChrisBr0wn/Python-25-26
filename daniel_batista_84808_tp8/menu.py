@@ -1,3 +1,5 @@
+import os
+
 # Exemplo de lógica para o início do menu.py
 def carregar_sessao():
     if os.path.exists("sessao.json"):

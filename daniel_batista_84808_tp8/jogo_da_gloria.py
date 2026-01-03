@@ -10,7 +10,7 @@ class Cores:
 
 def mostrar_tabuleiro(p1_pos, p2_pos):
     # tabuleiro 8x8
-    print("\n" + "═" * 33)
+    print("\n" + "═" * 41)
     for linha in range(8):
         row_str = "║"
         for coluna in range(8):
@@ -31,7 +31,7 @@ def mostrar_tabuleiro(p1_pos, p2_pos):
             
             row_str += f" {char} ║"
         print(row_str)
-        print("═" * 33 if linha == 7 else "╟" + "────╫" * 7 + "────╢")
+        print("═" * 41 if linha == 7 else "╟" + "────╫" * 7 + "────╢")
 
 def lanca_dado():
     return random.randint(1, 6)
