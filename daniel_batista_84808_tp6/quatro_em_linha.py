@@ -1,79 +1,75 @@
 def quatro_em_linha():
-    num_jogadas = 0
-    tabuleiro = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
+    # Matriz do tabuleiro 4x5
+    linhas = 4
+    colunas = 5
+    tabuleiro = [[" " for _ in range(colunas)] for _ in range(linhas)]
 
-    def mostrar_tabuleiro(tab):
-        print()
-        print(f" {tab[0]} | {tab[1]} | {tab[2]} | {tab[3]} |  {tab[4]} |")
-        print("--------------------")
-        print(f" {tab[5]} | {tab[6]} | {tab[7]} | {tab[8]} | {tab[9]} |")
-        print("--------------------")
-        print(f" {tab[10]}| {tab[11]}| {tab[12]}| {tab[13]}| {tab[14]} |")
-        print("--------------------")
-        print(f" {tab[15]}| {tab[16]}| {tab[17]}| {tab[18]}| {tab[19]} |")
-        print()
+    def mostrar_tabuleiro():
+        print("\n  1   2   3   4   5")
+        for linha in tabuleiro:
+            print(f"| {' | '.join(linha)} |") 
+            print("-" * 21)
+
+    def obter_linha_disponivel(col):
+        # Verifica espaço livre
+        for r in range(linhas - 1, -1, -1):
+            if tabuleiro[r][col] == " ":
+                return r
+        return None
+
+    def verificar_vitoria(p):
+        for r in range(linhas):
+            for c in range(colunas - 3):
+                if tabuleiro[r][c] == p and tabuleiro[r][c+1] == p and tabuleiro[r][c+2] == p and tabuleiro[r][c+3] == p:
+                    return True
+        for r in range(linhas - 3):
+            for c in range(colunas):
+                if tabuleiro[r][c] == p and tabuleiro[r+1][c] == p and tabuleiro[r+2][c] == p and tabuleiro[r+3][c] == p:
+                    return True
+        for r in range(3, linhas):
+            for c in range(colunas - 3):
+                if tabuleiro[r][c] == p and tabuleiro[r-1][c+1] == p and tabuleiro[r-2][c+2] == p and tabuleiro[r-3][c+3] == p:
+                    return True
+        for r in range(linhas - 3):
+            for c in range(colunas - 3):
+                if tabuleiro[r][c] == p and tabuleiro[r+1][c+1] == p and tabuleiro[r+2][c+2] == p and tabuleiro[r+3][c+3] == p:
+                    return True
+        return False
+
+    jogador = "o"
+    jogadas_totais = 0
 
     while True:
-        mostrar_tabuleiro(tabuleiro)
-
-        while True:
-            try:
-                pos_jog_1 = int(input("\njogador 1, insira posicao: "))
-            except ValueError:
-                print("Por favor insira um número válido.")
+        mostrar_tabuleiro()
+        try:
+            col_input = int(input(f"\nJogador {jogador}, escolha a coluna (1-5): ")) - 1
+            if col_input < 0 or col_input >= colunas:
+                print("Coluna inválida! Escolha entre 1 e 5.")
                 continue
-            if (tabuleiro[pos_jog_1 - 1] != 'o' and tabuleiro[pos_jog_1 - 1] != 'x'):
-                tabuleiro[pos_jog_1 - 1] = 'o'
+        except ValueError:
+            print("Por favor, insira um número.")
+            continue
+
+        linha = obter_linha_disponivel(col_input)
+
+        if linha is not None:
+            tabuleiro[linha][col_input] = jogador
+            jogadas_totais += 1
+            
+            if verificar_vitoria(jogador):
+                mostrar_tabuleiro()
+                print(f"\nParabéns! O Jogador {jogador} venceu!")
                 break
-            else:
-                print("erro: posicao já preenchida")
-        if ((tabuleiro[0] == tabuleiro[1] == tabuleiro[2] == tabuleiro[3] == 'o') or
-            (tabuleiro[4] == tabuleiro[5] == tabuleiro[6] == tabuleiro[7] == 'o') or
-            (tabuleiro[8] == tabuleiro[9] == tabuleiro[10] == tabuleiro[11] == 'o') or
-            (tabuleiro[12] == tabuleiro[13] == tabuleiro[14] == tabuleiro[15] == 'o') or
-            (tabuleiro[0] == tabuleiro[4] == tabuleiro[8] == tabuleiro[12] == 'o') or
-            (tabuleiro[1] == tabuleiro[5] == tabuleiro[9] == tabuleiro[13] == 'o') or
-            (tabuleiro[2] == tabuleiro[6] == tabuleiro[10] == tabuleiro[14] == 'o') or
-            (tabuleiro[3] == tabuleiro[7] == tabuleiro[11] == tabuleiro[15] == 'o') or
-            (tabuleiro[0] == tabuleiro[5] == tabuleiro[10] == tabuleiro[15] == 'o') or
-            (tabuleiro[3] == tabuleiro[6] == tabuleiro[9] == tabuleiro[12] == 'o')):
-            mostrar_tabuleiro(tabuleiro)
-            print("Jogador 1 Ganhou!")
-            break
-
-        num_jogadas += 1
-        if (num_jogadas == 20):
-            print("Empate, atingimos o número máximo de jogadas (4x5)")
-            break
-
-        while True:
-            try:
-                jogador2 = int(input("\njogador 2, insira posicao: "))
-            except ValueError:
-                print("Por favor insira um número válido.")
-                continue
-            if (tabuleiro[jogador2 - 1] != 'x' and tabuleiro[jogador2 - 1] != 'o'):
-                tabuleiro[jogador2 - 1] = 'x'
+            
+            if jogadas_totais == linhas * colunas:
+                mostrar_tabuleiro()
+                print("\nEmpate! O tabuleiro está cheio.")
                 break
-            else:
-                print("erro: posicao já preenchida")
-        
-        if ((tabuleiro[0] == tabuleiro[1] == tabuleiro[2] == tabuleiro[3] == 'x') or
-            (tabuleiro[4] == tabuleiro[5] == tabuleiro[6] == tabuleiro[7] == 'x') or
-            (tabuleiro[8] == tabuleiro[9] == tabuleiro[10] == tabuleiro[11] == 'x') or
-            (tabuleiro[12] == tabuleiro[13] == tabuleiro[14] == tabuleiro[15] == 'x') or
-            (tabuleiro[0] == tabuleiro[4] == tabuleiro[8] == tabuleiro[12] == 'x') or
-            (tabuleiro[1] == tabuleiro[5] == tabuleiro[9] == tabuleiro[13] == 'x') or
-            (tabuleiro[2] == tabuleiro[6] == tabuleiro[10] == tabuleiro[14] == 'x') or
-            (tabuleiro[3] == tabuleiro[7] == tabuleiro[11] == tabuleiro[15] == 'x') or
-            (tabuleiro[0] == tabuleiro[5] == tabuleiro[10] == tabuleiro[15] == 'x') or
-            (tabuleiro[3] == tabuleiro[6] == tabuleiro[9] == tabuleiro[12] == 'x')):
-            mostrar_tabuleiro(tabuleiro)
-            print("Jogador 2 Ganhou!")
-            break
-
-        num_jogadas += 1
-
+            
+            # Troca de jogador
+            jogador = "x" if jogador == "o" else "o"
+        else:
+            print("Essa coluna já está cheia! Tenta outra.")
 
 if __name__ == "__main__":
     quatro_em_linha()
