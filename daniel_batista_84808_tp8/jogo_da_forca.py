@@ -1,7 +1,18 @@
 import random
-import os
 
-def jogo_da_forca():
+def jogo_da_forca(save=None):
+    if save:
+        palavra_secreta = save['palavra']
+        letras_adivinhadas = set(save['tentadas'])
+        erros = save['erros']
+    else:
+        palavras = ["python", "programacao", "computador"] # Idealmente do palavras.txt
+        palavra_secreta = random.choice(palavras)
+        letras_adivinhadas = set()
+        erros = 0
+
+    max_erros = 6
+    # O código do boneco ASCII vai aqui
     BONECO = [
         """
            +---+
@@ -54,22 +65,7 @@ def jogo_da_forca():
                |
          ========="""
     ]
-
-    # Carregar palavras do ficheiro txt
-    try:
-        with open("palavras.txt", "r", encoding="utf-8") as f:
-            palavras = [linha.strip().lower() for linha in f if linha.strip()]
-    except FileNotFoundError:
-        # Usa uma lista padrão se o ficheiro não existir
-        palavras = ["python", "programacao", "desenvolvedor", "computador"]
-        print("⚠️ Ficheiro 'palavras.txt' não encontrado. A usar uma lista padrão...")
-
-    palavra_secreta = random.choice(palavras)
-    letras_adivinhadas = set()
-    erros = 0
-    max_erros = 6
     
-    # Mostra a palavra com letras adivinhadas
     def mostrar_palavra():
         return ' '.join([letra if letra in letras_adivinhadas else '_' for letra in palavra_secreta])
 
@@ -78,6 +74,14 @@ def jogo_da_forca():
     print("="*30)
 
     while erros < max_erros:
+        # Lógica de mostrar palavra e pedir letra
+        print(f"Letras: {letras_adivinhadas}")
+        print(BONECO[erros])
+        palpite = input("Letra (ou 'S' para salvar): ").strip().lower()
+
+        if palpite == 's':
+            return {"palavra": palavra_secreta, "tentadas": list(letras_adivinhadas), "erros": erros}
+        
         print(BONECO[erros]) # Mostra o boneco atualizado
         print(f"\nPalavra: {mostrar_palavra()}")
         print(f"Letras usadas: {', '.join(sorted(letras_adivinhadas))}")

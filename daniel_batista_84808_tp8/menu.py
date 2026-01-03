@@ -1,22 +1,33 @@
 import json
 import os
 
-def guardar_dados(dados):
-    """Guarda o dicionário de dados no ficheiro JSON"""
-    with open("arcade_data.json", "w", encoding="utf-8") as f:
-        json.dump(dados, f, indent=4)
+def gerir_dados(modo="ler", dados=None):
+    ficheiro = "arcade_data.json"
+    if modo == "escrever":
+        with open(ficheiro, "w") as f: json.dump(dados, f, indent=4)
+    else:
+        if os.path.exists(ficheiro):
+            with open(ficheiro, "r") as f: return json.load(f)
+        return {"p1": "", "p2": "", "scores": {"p1": 0, "p2": 0}, "saves": {}}
 
-def carregar_dados():
-    """Carrega os dados do ficheiro. Se não existir, cria uma estrutura nova."""
-    if os.path.exists("arcade_data.json"):
-        with open("arcade_data.json", "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {
-        "sessao_ativa": False,
-        "jogadores": {"p1": "", "p2": ""},
-        "pontuacao": {"p1": 0, "p2": 0},
-        "saves": {} # Aqui guardamos o tabuleiro de cada jogo
-    }
+def menu():
+    dados = gerir_dados()
+    if not dados["p1"]:
+        print("=== NOVA SESSÃO ===")
+        dados["p1"] = input("Nome Jogador 1: ")
+        dados["p2"] = input("Nome Jogador 2: ")
+        gerir_dados("escrever", dados)
+
+    while True:
+        print(f"\nSESSÃO: {dados['p1']} ({dados['scores']['p1']}) vs {dados['p2']} ({dados['scores']['p2']})")
+        print("1. Jogo do Galo\n2. 4 em Linha\n3. Minesweeper (NOVO)\n4. Sair")
+        op = input("Escolha: ")
+
+        # Lógica para carregar save ou novo jogo
+        save_atual = dados["saves"].get(op)
+        # Aqui chamarias: resultado = jogo_do_galo(save_atual)
+        # Se resultado for um tabuleiro -> dados["saves"][op] = resultado (Guardar)
+        # Se resultado for um vencedor -> dados["scores"][vencedor] += 1 (Pontuar)
 
 # Exemplo de lógica para o início do menu.py
 def carregar_sessao():
