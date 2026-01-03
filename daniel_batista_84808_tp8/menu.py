@@ -1,4 +1,22 @@
+import json
 import os
+
+def guardar_dados(dados):
+    """Guarda o dicionário de dados no ficheiro JSON"""
+    with open("arcade_data.json", "w", encoding="utf-8") as f:
+        json.dump(dados, f, indent=4)
+
+def carregar_dados():
+    """Carrega os dados do ficheiro. Se não existir, cria uma estrutura nova."""
+    if os.path.exists("arcade_data.json"):
+        with open("arcade_data.json", "r", encoding="utf-8") as f:
+            return json.load(f)
+    return {
+        "sessao_ativa": False,
+        "jogadores": {"p1": "", "p2": ""},
+        "pontuacao": {"p1": 0, "p2": 0},
+        "saves": {} # Aqui guardamos o tabuleiro de cada jogo
+    }
 
 # Exemplo de lógica para o início do menu.py
 def carregar_sessao():
