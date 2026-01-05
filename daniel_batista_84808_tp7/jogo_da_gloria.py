@@ -1,12 +1,12 @@
 import random
 import os
 
-class Cores:
-    RESET = "\033[0m"
-    P1 = "\033[91m"  # Vermelho
-    P2 = "\033[94m"  # Azul
-    ESPECIAL = "\033[93m" # Amarelo
-    BORDA = "\033[37m"
+
+RESET = "\033[0m"
+P1 = "\033[91m"  # Vermelho
+P2 = "\033[94m"  # Azul
+ESPECIAL = "\033[93m" # Amarelo
+BORDA = "\033[37m"
 
 def mostrar_tabuleiro(p1_pos, p2_pos):
     # tabuleiro 8x8
