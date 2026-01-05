@@ -21,11 +21,11 @@ def mostrar_tabuleiro(p1_pos, p2_pos):
             if casa == p1_pos and casa == p2_pos:
                 char = "XY" # Ambos na mesma casa
             elif casa == p1_pos:
-                char = f"{Cores.P1}P1{Cores.RESET}"
+                char = f"{P1}P1{RESET}"
             elif casa == p2_pos:
-                char = f"{Cores.P2}P2{Cores.RESET}"
+                char = f"{P2}P2{RESET}"
             elif casa in [6, 19, 25, 42, 58]: # Casas especiais
-                char = f"{Cores.ESPECIAL}!!{Cores.RESET}"
+                char = f"{ESPECIAL}!!{RESET}"
             else:
                 char = f"{casa:02d}"
             
