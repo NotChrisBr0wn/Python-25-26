@@ -2,19 +2,22 @@ import json
 import os
 
 def gerir_dados(modo="ler", dados=None):
-    """Lida com a leitura e escrita no ficheiro JSON para persistência"""
-    ficheiro = "arcade_data.json"
+    """Lida com a leitura e escrita no ficheiro JSON no mesmo diretório do script"""
+    # Obtém o caminho da pasta onde o menu.py está localizado
+    diretorio_atual = os.path.dirname(os.path.abspath(__file__))
+    ficheiro = os.path.join(diretorio_atual, "arcade_data.json")
+    
     if modo == "escrever":
         with open(ficheiro, "w", encoding="utf-8") as f: 
             json.dump(dados, f, indent=4)
     else:
-        # Verifica se o ficheiro existe e não está vazio
+        # Verifica se o ficheiro existe na pasta correta
         if os.path.exists(ficheiro) and os.path.getsize(ficheiro) > 0:
             with open(ficheiro, "r", encoding="utf-8") as f: 
                 return json.load(f)
         # Estrutura padrão para nova sessão
         return {"p1": "", "p2": "", "scores": {"p1": 0, "p2": 0}, "saves": {}}
-
+    
 GAMES = [
     ("Jogo do Galo", "jogo_do_galo", "jogo_do_galo"),
     ("4 em Linha", "quatro_em_linha", "quatro_em_linha"),
