@@ -1,15 +1,13 @@
 import random
 import os
 
-class Cores:
-    RESET = "\033[0m"
-    P1 = "\033[91m"  # Vermelho
-    P2 = "\033[94m"  # Azul
-    ESPECIAL = "\033[93m" # Amarelo
-    BORDA = "\033[37m"
+# Variáveis de cores simples (sem usar Classes)
+RESET = "\033[0m"
+COR_P1 = "\033[91m"  # Vermelho
+COR_P2 = "\033[94m"  # Azul
 
 def mostrar_tabuleiro(p1_pos, p2_pos):
-    # tabuleiro 8x8
+    # Tabuleiro 8x8 desenhado via código
     print("\n" + "═" * 41)
     for linha in range(8):
         row_str = "║"
@@ -19,18 +17,25 @@ def mostrar_tabuleiro(p1_pos, p2_pos):
             
             # Marcadores de jogadores
             if casa == p1_pos and casa == p2_pos:
-                char = "XY" # Ambos na mesma casa
+                char = "XY" 
             elif casa == p1_pos:
-                char = f"{Cores.P1}P1{Cores.RESET}"
+                char = f"{COR_P1}P1{RESET}"
             elif casa == p2_pos:
-                char = f"{Cores.P2}P2{Cores.RESET}"
-            elif casa in [6, 19, 25, 42, 58]: # Casas especiais
-                char = f"{Cores.ESPECIAL}!!{Cores.RESET}"
+                char = f"{COR_P2}P2{RESET}"
+            
+            # Emojis personalizados para as Casas Especiais
+            elif casa == 6:  char = "🌉" # Ponte
+            elif casa == 19: char = "🕳️ " # Poço
+            elif casa == 25: char = "🎲" # Dado
+            elif casa == 42: char = "🌀" # Labirinto
+            elif casa == 58: char = "🔒" # Prisão
+            
             else:
                 char = f"{casa:02d}"
             
             row_str += f" {char} ║"
         print(row_str)
+        # Linhas de separação do tabuleiro
         print("═" * 41 if linha == 7 else "╟" + "────╫" * 7 + "────╢")
 
 def lanca_dado():
@@ -43,42 +48,55 @@ def move_jogador(posicao_atual, valor_dado):
     return nova_posicao
 
 def verificar_casas_especiais(pos):
+    # Dicionário com as regras das casas
     casas_especiais = {
-        6: ("PONTE! Avança para a casa 12", 12),      
-        19: ("POÇO! Ficas preso 1 turno", 19),      
-        25: ("DADO! Salta para a casa 29", 29),     
-        42: ("LABIRINTO! Recua para a casa 30", 30), 
-        58: ("PRISÃO! Ficas preso 1 turno", 58),     
+        6: ("🌉 PONTE! Avança para a casa 12", 12),      
+        19: ("🕳️  POÇO! Ficas preso 1 turno", 19),      
+        25: ("🎲 DADO! Salta para a casa 29", 29),     
+        42: ("🌀 LABIRINTO! Recua para a casa 30", 30), 
+        58: ("🔒 PRISÃO! Ficas preso 1 turno", 58),     
     }
     if pos in casas_especiais:
         return casas_especiais[pos]
     return None, pos
 
-def jogo_da_gloria():
-    p1_pos, p2_pos = 0, 0
-    p1_skip, p2_skip = False, False
-    turno = 1
-
-    print("--- BEM-VINDO AO JOGO DA GLÓRIA ---")
-    p1_nome = input("Nome Jogador 1: ") or "P1"
-    p2_nome = input("Nome Jogador 2: ") or "P2"
+def jogo_da_gloria(save=None):
+    # Carregamento de progresso (Alínea B)
+    if save:
+        p1_pos = save['p1_pos']
+        p2_pos = save['p2_pos']
+        p1_skip = save['p1_skip']
+        p2_skip = save['p2_skip']
+        turno = save['turno']
+    else:
+        p1_pos, p2_pos = 0, 0
+        p1_skip, p2_skip = False, False
+        turno = 1
 
     while True:
         os.system('cls' if os.name == 'nt' else 'clear')
         mostrar_tabuleiro(p1_pos, p2_pos)
         
-        atual_nome = p1_nome if turno == 1 else p2_nome
+        atual_nome = "Jogador 1" if turno == 1 else "Jogador 2"
         atual_pos = p1_pos if turno == 1 else p2_pos
         atual_skip = p1_skip if turno == 1 else p2_skip
 
         print(f"\n>>> Vez de {atual_nome} (Casa {atual_pos})")
+        print("Digite 'S' para SALVAR e SAIR ou Enter para lançar o dado.")
+        comando = input("Escolha: ").strip().upper()
+
+        if comando == 'S':
+            return {
+                "p1_pos": p1_pos, "p2_pos": p2_pos, 
+                "p1_skip": p1_skip, "p2_skip": p2_skip, 
+                "turno": turno
+            }
 
         if atual_skip:
             print("⚠️ Estás preso! Perdes a vez.")
             if turno == 1: p1_skip = False
             else: p2_skip = False
         else:
-            input("Pressiona Enter para lançar dado...")
             dado = lanca_dado()
             print(f"🎲 Dado: {dado}")
             
@@ -97,7 +115,8 @@ def jogo_da_gloria():
             if final_pos == 63:
                 mostrar_tabuleiro(p1_pos, p2_pos)
                 print(f"\n🏆 {atual_nome} VENCEU!")
-                break
+                input("\nPrime Enter para voltar ao menu...")
+                return "vitoria_p1" if turno == 1 else "vitoria_p2"
 
         turno = 2 if turno == 1 else 1
         input("\nPassar turno...")
