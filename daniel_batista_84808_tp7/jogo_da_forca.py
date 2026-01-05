@@ -60,7 +60,6 @@ def jogo_da_forca():
         with open("palavras.txt", "r", encoding="utf-8") as f:
             palavras = [linha.strip().lower() for linha in f if linha.strip()]
     except FileNotFoundError:
-        # Usa uma lista padrão se o ficheiro não existir
         palavras = ["python", "programacao", "desenvolvedor", "computador"]
         print("⚠️ Ficheiro 'palavras.txt' não encontrado. A usar uma lista padrão...")
 
@@ -78,18 +77,18 @@ def jogo_da_forca():
     print("="*30)
 
     while erros < max_erros:
-        print(BONECO[erros]) # Mostra o boneco atualizado
+        print(BONECO[erros])
         print(f"\nPalavra: {mostrar_palavra()}")
         print(f"Letras usadas: {', '.join(sorted(letras_adivinhadas))}")
         
         palpite = input("\nAdivinhe uma letra: ").strip().lower()
 
         # Validações
-        if len(palpite) != 1 or not palpite.isalpha(): # Verifica se o palpite é uma única letra
+        if len(palpite) != 1 or not palpite.isalpha():
             print("⚠️ Por favor, insira apenas uma letra.")
             continue
 
-        if palpite in letras_adivinhadas: # Verifica se a letra já foi adivinhada
+        if palpite in letras_adivinhadas:
             print(f"⚠️ Já tentaste a letra '{palpite}'. Tenta outra.")
             continue
 
@@ -101,7 +100,7 @@ def jogo_da_forca():
             erros += 1
             print(f"❌ Errado! A letra '{palpite}' não existe. (Tentativas restantes: {max_erros - erros})")
 
-        # Verifica se ganhou
+        # Vitoria
         if all(letra in letras_adivinhadas for letra in palavra_secreta):
             print(f"\n🎉 PARABÉNS! A palavra era '{palavra_secreta.upper()}'.")
             print("Ganhaste o jogo!")
