@@ -7,10 +7,10 @@ def jogo_do_galo(save=None):
         x_count = tabuleiro.count('X')
         o_count = tabuleiro.count('O')
         simbolo_atual = 'X' if x_count <= o_count else 'O'
-        p1_simbolo = 'X' # Valor de referência
+        p1_simbolo = 'X' 
     else:
         tabuleiro = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
-        # Escolher X ou O para o Jogador 1 num jogo novo
+        # Escolher X ou O para o Jogador 1 
         while True:
             os.system('cls' if os.name == 'nt' else 'clear')
             print("=== CONFIGURAÇÃO DO JOGO ===")

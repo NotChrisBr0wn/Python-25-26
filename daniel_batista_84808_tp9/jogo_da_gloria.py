@@ -1,13 +1,13 @@
 import random
 import os
 
-# Variáveis de cores simples (sem usar Classes)
+# Cores
 RESET = "\033[0m"
 COR_P1 = "\033[91m"  # Vermelho
 COR_P2 = "\033[94m"  # Azul
 
 def mostrar_tabuleiro(p1_pos, p2_pos):
-    # Tabuleiro 8x8 desenhado via código
+    # Tabuleiro 8x8 
     print("\n" + "═" * 41)
     for linha in range(8):
         row_str = "║"
@@ -15,7 +15,6 @@ def mostrar_tabuleiro(p1_pos, p2_pos):
             casa = linha * 8 + coluna
             if casa > 63: break
             
-            # Marcadores de jogadores
             if casa == p1_pos and casa == p2_pos:
                 char = "XY" 
             elif casa == p1_pos:
@@ -23,19 +22,17 @@ def mostrar_tabuleiro(p1_pos, p2_pos):
             elif casa == p2_pos:
                 char = f"{COR_P2}P2{RESET}"
             
-            # Emojis personalizados para as Casas Especiais
-            elif casa == 6:  char = "🌉" # Ponte
-            elif casa == 19: char = "🕳️ " # Poço
-            elif casa == 25: char = "🎲" # Dado
-            elif casa == 42: char = "🌀" # Labirinto
-            elif casa == 58: char = "🔒" # Prisão
+            elif casa == 6:  char = "🌉" 
+            elif casa == 19: char = "🕳️ "
+            elif casa == 25: char = "🎲" 
+            elif casa == 42: char = "🌀" 
+            elif casa == 58: char = "🔒" 
             
             else:
                 char = f"{casa:02d}"
             
             row_str += f" {char} ║"
         print(row_str)
-        # Linhas de separação do tabuleiro
         print("═" * 41 if linha == 7 else "╟" + "────╫" * 7 + "────╢")
 
 def lanca_dado():
@@ -48,7 +45,6 @@ def move_jogador(posicao_atual, valor_dado):
     return nova_posicao
 
 def verificar_casas_especiais(pos):
-    # Dicionário com as regras das casas
     casas_especiais = {
         6: ("🌉 PONTE! Avança para a casa 12", 12),      
         19: ("🕳️  POÇO! Ficas preso 1 turno", 19),      
@@ -61,7 +57,6 @@ def verificar_casas_especiais(pos):
     return None, pos
 
 def jogo_da_gloria(save=None):
-    # Carregamento de progresso (Alínea B)
     if save:
         p1_pos = save['p1_pos']
         p2_pos = save['p2_pos']
