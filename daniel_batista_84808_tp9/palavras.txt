@@ -3,3 +3,13 @@ biblioteca
 computador
 dinossauro
 elefante
+professor
+escola
+universidade
+comer
+batata
+daniel
+iara
+banana
+estudar
+programador

@@ -3,3 +3,8 @@ biblioteca
 computador
 dinossauro
 elefante
+professor
+escola
+universidade
+comer
+batata

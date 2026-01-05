@@ -1,0 +1,15 @@
+{
+    "p1": "Daniel",
+    "p2": "Iara",
+    "scores": {
+        "p1": 1,
+        "p2": 0
+    },
+    "saves": {
+        "4": {
+            "palavra": "computador",
+            "tentadas": [],
+            "erros": 0
+        }
+    }
+}

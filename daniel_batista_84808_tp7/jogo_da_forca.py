@@ -55,59 +55,74 @@ def jogo_da_forca():
          ========="""
     ]
 
-    # Carregar palavras do ficheiro txt
-    try:
-        with open("palavras.txt", "r", encoding="utf-8") as f:
-            palavras = [linha.strip().lower() for linha in f if linha.strip()]
-    except FileNotFoundError:
-        palavras = ["python", "programacao", "desenvolvedor", "computador"]
-        print("⚠️ Ficheiro 'palavras.txt' não encontrado. A usar uma lista padrão...")
+    diretorio_atual = os.path.dirname(__file__)
+    caminho_ficheiro = os.path.join(diretorio_atual, "palavras.txt")
 
-    palavra_secreta = random.choice(palavras)
+    try:
+        with open(caminho_ficheiro, "r", encoding="utf-8") as f:
+            lista_palavras = [linha.strip().lower() for linha in f if linha.strip()]
+        
+        if not lista_palavras:
+            raise FileNotFoundError
+        
+        palavra_secreta = random.choice(lista_palavras)
+    except Exception:
+        lista_seguranca = ["python", "programacao", "computador", "algoritmo"]
+        palavra_secreta = random.choice(lista_seguranca)
+        print("⚠️ Aviso: 'palavras.txt' não encontrado. A usar lista de emergência.")
+        input("Prime Enter para jogar...")
+
     letras_adivinhadas = set()
     erros = 0
     max_erros = 6
-    
-    # Mostra a palavra com letras adivinhadas
+
     def mostrar_palavra():
-        return ' '.join([letra if letra in letras_adivinhadas else '_' for letra in palavra_secreta])
-
-    print("\n" + "="*30)
-    print("  BEM-VINDO AO JOGO DA FORCA")
-    print("="*30)
-
+        return " ".join([letra if letra in letras_adivinhadas else "_" for letra in palavra_secreta])
+    
+    # --- Main Loop ---
     while erros < max_erros:
+        os.system('cls' if os.name == 'nt' else 'clear')
+        
+        print("=== JOGO DA FORCA ===")
         print(BONECO[erros])
         print(f"\nPalavra: {mostrar_palavra()}")
-        print(f"Letras usadas: {', '.join(sorted(letras_adivinhadas))}")
         
-        palpite = input("\nAdivinhe uma letra: ").strip().lower()
+        erradas = [l for l in letras_adivinhadas if l not in palavra_secreta]
+        print(f"Letras erradas: {', '.join(sorted(erradas))}")
+        print(f"Tentativas restantes: {max_erros - erros}")
 
-        # Validações
+        palpite = input("\nEscolha uma letra: ").strip().lower()
+
         if len(palpite) != 1 or not palpite.isalpha():
-            print("⚠️ Por favor, insira apenas uma letra.")
+            print("❌ Erro: Insira apenas uma letra!")
+            input("Enter...")
             continue
 
         if palpite in letras_adivinhadas:
-            print(f"⚠️ Já tentaste a letra '{palpite}'. Tenta outra.")
+            print(f"⚠️ Já tentaste a letra '{palpite}'.")
+            input("Enter...")
             continue
 
         letras_adivinhadas.add(palpite)
 
         if palpite in palavra_secreta:
-            print(f"✅ Boa! A letra '{palpite}' existe na palavra.")
+            print(f"✅ Boa! A letra '{palpite}' existe.")
         else:
             erros += 1
-            print(f"❌ Errado! A letra '{palpite}' não existe. (Tentativas restantes: {max_erros - erros})")
-
-        # Vitoria
+            print(f"❌ Errado! A letra '{palpite}' não existe.")
+        
         if all(letra in letras_adivinhadas for letra in palavra_secreta):
-            print(f"\n🎉 PARABÉNS! A palavra era '{palavra_secreta.upper()}'.")
-            print("Ganhaste o jogo!")
-            break
-    else:
-        print(BONECO[max_erros])
-        print(f"\n💀 FIM DE JOGO! Enforcastes-te. A palavra era '{palavra_secreta.upper()}'.")
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print(f"🏆 PARABÉNS! Ganhaste! A palavra era: {palavra_secreta.upper()}")
+            input("\nPrime Enter para voltar ao menu...")
+            return "vitoria"
+
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print(BONECO[6])
+    print(f"\n💀 PERDESTE! O boneco foi enforcado.")
+    print(f"A palavra correta era: {palavra_secreta.upper()}")
+    input("\nPrime Enter para continuar...")
+    return "derrota"
 
 if __name__ == "__main__":
     jogo_da_forca()

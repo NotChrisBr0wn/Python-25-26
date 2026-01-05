@@ -7,7 +7,6 @@ GAMES = [
 
 
 def import_and_run(module_name: str, func_name: str):
-    # Try absolute import first, then local import fallback
     try:
         module = __import__(f"daniel_batista_84808_tp6.{module_name}", fromlist=[func_name])
         func = getattr(module, func_name)
