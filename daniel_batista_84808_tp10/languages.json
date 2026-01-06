@@ -1,0 +1,34 @@
+{
+    "pt": {
+        "select_lang": "Escolha o Idioma:",
+        "new_session": "\n=== NOVA SESSÃO ===",
+        "continue_session": "\nSessão encontrada: {} vs {}. Continuar? (s/n): ",
+        "p1_name": "Nome Jogador 1: ",
+        "p2_name": "Nome Jogador 2: ",
+        "arcade_title": "=== ARCADE CENTER ===",
+        "points": "Pontos: {}: {} | {}: {} | CPU: {}",
+        "continue": "[CONTINUAR]",
+        "new": "[NOVO]",
+        "exit": "Sair",
+        "choice": "\nEscolha (1-{}): ",
+        "saved": "\nJogo guardado!",
+        "back": "\nPrime Enter para voltar...",
+        "invalid": "Opção inválida!"
+    },
+    "en": {
+        "select_lang": "Select Language:",
+        "new_session": "\n=== NEW SESSION ===",
+        "continue_session": "\nSession found: {} vs {}. Continue? (y/n): ",
+        "p1_name": "Player 1 Name: ",
+        "p2_name": "Player 2 Name: ",
+        "arcade_title": "=== ARCADE CENTER ===",
+        "points": "Points: {}: {} | {}: {} | CPU: {}",
+        "continue": "[CONTINUE]",
+        "new": "[NEW]",
+        "exit": "Exit",
+        "choice": "\nChoice (1-{}): ",
+        "saved": "\nGame saved!",
+        "back": "\nPress Enter to go back...",
+        "invalid": "Invalid option!"
+    }
+}

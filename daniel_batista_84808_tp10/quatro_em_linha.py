@@ -1,13 +1,24 @@
 import os
+import random
+import time
 
 def quatro_em_linha(save=None):
     LINHAS, COLUNAS = 4, 6
+    
+    # --- CONFIGURAÇÃO E CARREGAMENTO (Alínea c) ---
     if save:
         tabuleiro = save['tab']
         turno = save['turno']
+        modo_cpu = save.get('cpu', False)
     else:
         tabuleiro = [[" " for _ in range(COLUNAS)] for _ in range(LINHAS)]
         turno = "X"
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("=== CONFIGURAÇÃO: 4 EM LINHA ===")
+        print("1. Jogador vs Computador")
+        print("2. Jogador vs Jogador")
+        modo = input("Escolha o modo: ").strip()
+        modo_cpu = True if modo == "1" else False
 
     def mostrar():
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -17,33 +28,64 @@ def quatro_em_linha(save=None):
         print("-" * 25)
 
     def verificar_vitoria(p):
-        # Horizontal, Vertical e Diagonais (lógica simplificada)
+        # Horizontal
         for r in range(LINHAS):
-            for c in range(COLUNAS - 4):
+            for c in range(COLUNAS - 3):
                 if all(tabuleiro[r][c+i] == p for i in range(4)): return True
-        for r in range(LINHAS - 4):
+        # Vertical
+        for r in range(LINHAS - 3):
             for c in range(COLUNAS):
                 if all(tabuleiro[r+i][c] == p for i in range(4)): return True
+        # Diagonais
+        for r in range(LINHAS - 3):
+            for c in range(COLUNAS - 3):
+                if all(tabuleiro[r+i][c+i] == p for i in range(4)): return True
+                if all(tabuleiro[r+3-i][c+i] == p for i in range(4)): return True
         return False
 
+    # --- CICLO DE JOGO ---
     while True:
         mostrar()
-        print(f"Vez de {turno} | (S) Sair e Guardar")
-        jogada = input("Coluna (1-6): ").strip().upper()
+        nome_turno = "Jogador 1" if turno == "X" else ("Computador" if modo_cpu else "Jogador 2")
+        print(f"Vez de {nome_turno} ({turno}) | (S) Sair e Guardar")
 
-        if jogada == 'S':
-            return {"tab": tabuleiro, "turno": turno}
+        # Alínea (a): Lógica de jogada CPU ou Humano
+        if modo_cpu and turno == "O":
+            print("Computador a escolher coluna...")
+            time.sleep(1)
+            # Escolhe apenas colunas que não estejam cheias
+            colunas_validas = [c for c in range(COLUNAS) if tabuleiro[0][c] == " "]
+            if not colunas_validas: break # Empate
+            c = random.choice(colunas_validas)
+        else:
+            jogada = input("Coluna (1-6): ").strip().upper()
+            if jogada == 'S': # Alínea (b)
+                return {"tab": tabuleiro, "turno": turno, "cpu": modo_cpu}
+            try:
+                c = int(jogada) - 1
+                if not (0 <= c < COLUNAS) or tabuleiro[0][c] != " ":
+                    print("❌ Coluna inválida ou cheia!"); time.sleep(1); continue
+            except: continue
 
-        try:
-            c = int(jogada) - 1
-            for r in range(LINHAS-1, -1, -1):
-                if tabuleiro[r][c] == " ":
-                    tabuleiro[r][c] = turno
-                    if verificar_vitoria(turno):
-                        mostrar()
-                        print(f"🏆 O Jogador {turno} venceu!")
-                        input("Enter...")
-                        return "vitoria"
-                    turno = "O" if turno == "X" else "X"
-                    break
-        except: continue
+        # Colocar a peça na primeira linha disponível de baixo para cima
+        for r in range(LINHAS-1, -1, -1):
+            if tabuleiro[r][c] == " ":
+                tabuleiro[r][c] = turno
+                break
+
+        # --- VERIFICAÇÃO DE RESULTADOS (Alínea d) ---
+        if verificar_vitoria(turno):
+            mostrar()
+            print(f"🏆 FIM DE JOGO: {nome_turno} VENCEU!")
+            input("Prime Enter para voltar ao menu...")
+            if turno == "X": return "vitoria_p1"
+            return "vitoria_cpu" if modo_cpu else "vitoria_p2"
+
+        # Verificar Empate
+        if all(tabuleiro[0][c] != " " for c in range(COLUNAS)):
+            mostrar()
+            print("🤝 Empate! O tabuleiro está cheio.")
+            input("Prime Enter...")
+            return "empate"
+
+        turno = "O" if turno == "X" else "X"

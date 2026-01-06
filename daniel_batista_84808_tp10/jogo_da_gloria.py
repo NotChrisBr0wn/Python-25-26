@@ -1,5 +1,6 @@
 import random
 import os
+import time
 
 # Cores
 RESET = "\033[0m"
@@ -57,36 +58,60 @@ def verificar_casas_especiais(pos):
     return None, pos
 
 def jogo_da_gloria(save=None):
+    # --- CONFIGURAÇÃO E CARREGAMENTO (Alínea c) ---
     if save:
         p1_pos = save['p1_pos']
         p2_pos = save['p2_pos']
         p1_skip = save['p1_skip']
         p2_skip = save['p2_skip']
         turno = save['turno']
+        modo_cpu = save.get('cpu', False)
     else:
         p1_pos, p2_pos = 0, 0
         p1_skip, p2_skip = False, False
         turno = 1
+        os.system('cls' if os.name == 'nt' else 'clear')
+        print("=== CONFIGURAÇÃO: JOGO DA GLÓRIA ===")
+        # Alínea (a): Escolha entre CPU ou 2 Jogadores
+        print("1. Jogador vs Computador")
+        print("2. Jogador vs Jogador")
+        modo = input("Escolha o modo: ").strip()
+        modo_cpu = True if modo == "1" else False
 
     while True:
         os.system('cls' if os.name == 'nt' else 'clear')
         mostrar_tabuleiro(p1_pos, p2_pos)
         
-        atual_nome = "Jogador 1" if turno == 1 else "Jogador 2"
-        atual_pos = p1_pos if turno == 1 else p2_pos
-        atual_skip = p1_skip if turno == 1 else p2_skip
+        # Define se é a vez do Jogador 1 ou do Adversário (P2 ou CPU)
+        if turno == 1:
+            atual_nome = "Jogador 1"
+            atual_pos = p1_pos
+            atual_skip = p1_skip
+        else:
+            atual_nome = "Computador" if modo_cpu else "Jogador 2"
+            atual_pos = p2_pos
+            atual_skip = p2_skip
 
         print(f"\n>>> Vez de {atual_nome} (Casa {atual_pos})")
-        print("Digite 'S' para SALVAR e SAIR ou Enter para lançar o dado.")
-        comando = input("Escolha: ").strip().upper()
+        
+        # Alínea (a): Lógica para jogada do Computador vs Humano
+        if modo_cpu and turno == 2:
+            print("🤖 Computador a lançar dado...")
+            time.sleep(1)
+            comando = "" # CPU apenas "carrega Enter"
+        else:
+            print("Digite 'S' para SALVAR e SAIR ou Enter para lançar o dado.")
+            comando = input("Escolha: ").strip().upper()
 
+        # Alínea (b): Salvar o estado atual para o disco
         if comando == 'S':
             return {
                 "p1_pos": p1_pos, "p2_pos": p2_pos, 
                 "p1_skip": p1_skip, "p2_skip": p2_skip, 
-                "turno": turno
+                "turno": turno, "cpu": modo_cpu
             }
 
+        # Lógica de movimentação
         if atual_skip:
             print("⚠️ Estás preso! Perdes a vez.")
             if turno == 1: p1_skip = False
@@ -100,18 +125,22 @@ def jogo_da_gloria(save=None):
             
             if msg:
                 print(f"⭐ {msg}")
-                if "preso" in msg:
+                if "preso" in msg or "Ficas preso" in msg:
                     if turno == 1: p1_skip = True
                     else: p2_skip = True
             
             if turno == 1: p1_pos = final_pos
             else: p2_pos = final_pos
 
+            # Alínea (d): Verificar vitória e retornar para pontuação cumulativa
             if final_pos == 63:
+                os.system('cls' if os.name == 'nt' else 'clear')
                 mostrar_tabuleiro(p1_pos, p2_pos)
                 print(f"\n🏆 {atual_nome} VENCEU!")
                 input("\nPrime Enter para voltar ao menu...")
-                return "vitoria_p1" if turno == 1 else "vitoria_p2"
+                
+                if turno == 1: return "vitoria_p1"
+                return "vitoria_cpu" if modo_cpu else "vitoria_p2"
 
         turno = 2 if turno == 1 else 1
         input("\nPassar turno...")

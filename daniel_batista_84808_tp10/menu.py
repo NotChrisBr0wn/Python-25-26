@@ -1,20 +1,37 @@
 import json
 import os
+import time
 
 def gerir_dados(modo="ler", dados=None):
-    """Lida com a leitura e escrita no ficheiro JSON no mesmo diretório do script"""
-    diretorio_atual = os.path.dirname(os.path.abspath(__file__))
-    ficheiro = os.path.join(diretorio_atual, "arcade_data.json")
+    diretorio_local = os.path.dirname(os.path.abspath(__file__))
+    ficheiro_arcade = os.path.join(diretorio_local, "arcade_data.json")
+    ficheiro_idiomas = os.path.join(diretorio_local, "languages.json")
     
+    if modo == "idiomas":
+        try:
+            if os.path.exists(ficheiro_idiomas):
+                with open(ficheiro_idiomas, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            else:
+                return {
+                    "pt": {"arcade_title": "=== ARCADE ===", "points": "Pontos: {}: {} | {}: {} | CPU: {}", "choice": "Escolha: ", "exit": "Sair", "continue": "[C]", "new": "[N]", "back": "Enter para voltar", "continue_session": "Continuar sessão? ", "new_session": "Nova Sessão", "p1_name": "Nome P1: ", "p2_name": "Nome P2: "},
+                    "en": {"arcade_title": "=== ARCADE ===", "points": "Points: {}: {} | {}: {} | CPU: {}", "choice": "Choice: ", "exit": "Exit", "continue": "[C]", "new": "[N]", "back": "Enter to back", "continue_session": "Continue session? ", "new_session": "New Session", "p1_name": "P1 Name: ", "p2_name": "P2 Name: "}
+                }
+        except: return None
+
     if modo == "escrever":
-        with open(ficheiro, "w", encoding="utf-8") as f: 
+        with open(ficheiro_arcade, "w", encoding="utf-8") as f: 
             json.dump(dados, f, indent=4)
     else:
-        if os.path.exists(ficheiro) and os.path.getsize(ficheiro) > 0:
-            with open(ficheiro, "r", encoding="utf-8") as f: 
-                return json.load(f)
-        return {"p1": "", "p2": "", "scores": {"p1": 0, "p2": 0}, "saves": {}}
-    
+        if os.path.exists(ficheiro_arcade) and os.path.getsize(ficheiro_arcade) > 0:
+            try:
+                with open(ficheiro_arcade, "r", encoding="utf-8") as f: 
+                    d = json.load(f)
+                    if "scores" not in d: d["scores"] = {"p1": 0, "p2": 0, "cpu": 0}
+                    return d
+            except: pass
+        return {"p1": "", "p2": "", "scores": {"p1": 0, "p2": 0, "cpu": 0}, "saves": {}, "lang": "pt"}
+
 GAMES = [
     ("Jogo do Galo", "jogo_do_galo", "jogo_do_galo"),
     ("4 em Linha", "quatro_em_linha", "quatro_em_linha"),
@@ -25,72 +42,68 @@ GAMES = [
 ]
 
 def import_and_run(module_name, func_name, save_data):
-    """Importa o módulo e executa a função passando o parâmetro save"""
     try:
         modulo = __import__(module_name)
         func = getattr(modulo, func_name)
         return func(save=save_data)
     except Exception as e:
-        print(f"Erro ao carregar o jogo {module_name}: {e}")
+        print(f"Erro: {e}")
+        time.sleep(2)
         return None
 
 def menu():
+    all_texts = gerir_dados(modo="idiomas")
     dados = gerir_dados()
     
-    if dados["p1"]:
-        print(f"\nSessão encontrada: {dados['p1']} vs {dados['p2']}")
-        resp = input("Deseja continuar esta sessão? (s/n): ").lower()
-        if resp != 's':
-            dados = {"p1": "", "p2": "", "scores": {"p1": 0, "p2": 0}, "saves": {}}
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("1. English / 2. Português")
+    l_choice = input(">> ").strip()
+    lang = "en" if l_choice == "1" else "pt"
+    t = all_texts[lang]
 
-    if not dados["p1"]:
-        print("\n=== NOVA SESSÃO ===")
-        dados["p1"] = input("Nome Jogador 1: ") or "Jogador 1"
-        dados["p2"] = input("Nome Jogador 2: ") or "Jogador 2"
+    if dados.get("p1"):
+        os.system('cls' if os.name == 'nt' else 'clear')
+        resp = input(t["continue_session"].format(dados['p1'], dados['p2'])).lower()
+        if resp not in ['s', 'y', 'sim', 'yes']:
+            dados = {"p1": "", "p2": "", "scores": {"p1": 0, "p2": 0, "cpu": 0}, "saves": {}, "lang": lang}
+
+    if not dados.get("p1"):
+        print(t["new_session"])
+        dados["p1"] = input(t["p1_name"]) or "P1"
+        dados["p2"] = input(t["p2_name"]) or "P2"
         gerir_dados("escrever", dados)
 
     while True:
         os.system('cls' if os.name == 'nt' else 'clear')
-        print(f"=== ARCADE CENTER ===")
-        print(f"SESSÃO: {dados['p1']} ({dados['scores']['p1']}) vs {dados['p2']} ({dados['scores']['p2']})")
-        print("-" * 30)
+        print(t["arcade_title"])
+        sc = dados.get("scores", {"p1":0, "p2":0, "cpu":0})
+        print(t["points"].format(dados['p1'], sc['p1'], dados['p2'], sc['p2'], sc['cpu']))
+        print("-" * 40)
         
         for i, (name, _, _) in enumerate(GAMES, start=1):
-            status = "[CONTINUAR]" if str(i) in dados["saves"] else "[NOVO]"
+            status = t["continue"] if str(i) in dados["saves"] else t["new"]
             print(f"{i}. {name} {status}")
         
-        print(f"{len(GAMES) + 1}. Sair")
+        print(f"{len(GAMES) + 1}. {t['exit']}")
         
-        escolha = input(f"\nEscolha (1-{len(GAMES) + 1}): ").strip()
+        escolha = input(t["choice"].format(len(GAMES) + 1)).strip()
 
-        if escolha.isdigit():
-            n = int(escolha)
-            if 1 <= n <= len(GAMES):
-                nome_jogo, mod_name, func_name = GAMES[n - 1]
-                
-                save_atual = dados["saves"].get(escolha)
-                
-                resultado = import_and_run(mod_name, func_name, save_atual)
-
-                if isinstance(resultado, dict):
-                    dados["saves"][escolha] = resultado
-                    print("\nJogo guardado!")
-                elif resultado:
-                    if escolha in dados["saves"]:
-                        del dados["saves"][escolha]
-                    
-                    if "vitoria_p1" in str(resultado) or "vitoria_X" in str(resultado):
-                        dados["scores"]["p1"] += 1
-                    elif "vitoria_p2" in str(resultado) or "vitoria_O" in str(resultado):
-                        dados["scores"]["p2"] += 1
-                    elif resultado == "vitoria": 
-                        dados["scores"]["p1"] += 1
-                
-                gerir_dados("escrever", dados)
-                input("\nPrime Enter para voltar...")
-                
-            elif n == len(GAMES) + 1:
-                break
+        if escolha == str(len(GAMES) + 1): break
+        
+        if escolha in [str(i) for i in range(1, len(GAMES)+1)]:
+            idx = int(escolha) - 1
+            res = import_and_run(GAMES[idx][1], GAMES[idx][2], dados["saves"].get(escolha))
+            
+            if isinstance(res, dict):
+                dados["saves"][escolha] = res
+            elif res:
+                if escolha in dados["saves"]: del dados["saves"][escolha]
+                if "vitoria_p1" in str(res): dados["scores"]["p1"] += 1
+                elif "vitoria_p2" in str(res): dados["scores"]["p2"] += 1
+                elif "vitoria_cpu" in str(res): dados["scores"]["cpu"] += 1
+            
+            gerir_dados("escrever", dados)
+            input(t["back"])
 
 if __name__ == "__main__":
     menu()
