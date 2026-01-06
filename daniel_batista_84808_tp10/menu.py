@@ -39,6 +39,7 @@ GAMES = [
     ("Jogo da Forca", "jogo_da_forca", "jogo_da_forca"),
     ("Minesweeper", "minesweeper", "minesweeper"),
     ("Batalha Naval", "batalha_naval", "batalha_naval"),
+    ("Jogo do Moinho", "jogo_da_trilha", "jogo_da_trilha"),
 ]
 
 def import_and_run(module_name, func_name, save_data):
