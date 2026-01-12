@@ -78,7 +78,7 @@ def jogo_da_trilha(save=None):
                 pass
         else:
             jogada = input(f"Jogador{turno}, escolha posição: ").strip().upper()
-            if jogada == 'S':
+            if jogada == 'S' or jogada == 's':
                 return {"tab": tab, "turno": turno, "p_col": pecas_col, "fase": fase, "modo": modo}
             
             try:

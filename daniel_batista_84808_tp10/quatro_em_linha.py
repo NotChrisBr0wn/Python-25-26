@@ -5,7 +5,6 @@ import time
 def quatro_em_linha(save=None):
     LINHAS, COLUNAS = 4, 6
     
-    # --- CONFIGURAÇÃO E CARREGAMENTO (Alínea c) ---
     if save:
         tabuleiro = save['tab']
         turno = save['turno']
@@ -43,23 +42,20 @@ def quatro_em_linha(save=None):
                 if all(tabuleiro[r+3-i][c+i] == p for i in range(4)): return True
         return False
 
-    # --- CICLO DE JOGO ---
     while True:
         mostrar()
         nome_turno = "Jogador 1" if turno == "X" else ("Computador" if modo_cpu else "Jogador 2")
         print(f"Vez de {nome_turno} ({turno}) | (S) Sair e Guardar")
 
-        # Alínea (a): Lógica de jogada CPU ou Humano
         if modo_cpu and turno == "O":
             print("Computador a escolher coluna...")
             time.sleep(1)
-            # Escolhe apenas colunas que não estejam cheias
             colunas_validas = [c for c in range(COLUNAS) if tabuleiro[0][c] == " "]
             if not colunas_validas: break # Empate
             c = random.choice(colunas_validas)
         else:
             jogada = input("Coluna (1-6): ").strip().upper()
-            if jogada == 'S': # Alínea (b)
+            if jogada == 'S' or jogada == 's': 
                 return {"tab": tabuleiro, "turno": turno, "cpu": modo_cpu}
             try:
                 c = int(jogada) - 1
@@ -67,13 +63,11 @@ def quatro_em_linha(save=None):
                     print("❌ Coluna inválida ou cheia!"); time.sleep(1); continue
             except: continue
 
-        # Colocar a peça na primeira linha disponível de baixo para cima
         for r in range(LINHAS-1, -1, -1):
             if tabuleiro[r][c] == " ":
                 tabuleiro[r][c] = turno
                 break
-
-        # --- VERIFICAÇÃO DE RESULTADOS (Alínea d) ---
+            
         if verificar_vitoria(turno):
             mostrar()
             print(f"🏆 FIM DE JOGO: {nome_turno} VENCEU!")

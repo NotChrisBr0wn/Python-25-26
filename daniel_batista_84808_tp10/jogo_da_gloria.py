@@ -58,7 +58,6 @@ def verificar_casas_especiais(pos):
     return None, pos
 
 def jogo_da_gloria(save=None):
-    # --- CONFIGURAÇÃO E CARREGAMENTO (Alínea c) ---
     if save:
         p1_pos = save['p1_pos']
         p2_pos = save['p2_pos']
@@ -72,7 +71,6 @@ def jogo_da_gloria(save=None):
         turno = 1
         os.system('cls' if os.name == 'nt' else 'clear')
         print("=== CONFIGURAÇÃO: JOGO DA GLÓRIA ===")
-        # Alínea (a): Escolha entre CPU ou 2 Jogadores
         print("1. Jogador vs Computador")
         print("2. Jogador vs Jogador")
         modo = input("Escolha o modo: ").strip()
@@ -82,7 +80,6 @@ def jogo_da_gloria(save=None):
         os.system('cls' if os.name == 'nt' else 'clear')
         mostrar_tabuleiro(p1_pos, p2_pos)
         
-        # Define se é a vez do Jogador 1 ou do Adversário (P2 ou CPU)
         if turno == 1:
             atual_nome = "Jogador 1"
             atual_pos = p1_pos
@@ -94,24 +91,21 @@ def jogo_da_gloria(save=None):
 
         print(f"\n>>> Vez de {atual_nome} (Casa {atual_pos})")
         
-        # Alínea (a): Lógica para jogada do Computador vs Humano
         if modo_cpu and turno == 2:
             print("🤖 Computador a lançar dado...")
             time.sleep(1)
-            comando = "" # CPU apenas "carrega Enter"
+            comando = ""
         else:
             print("Digite 'S' para SALVAR e SAIR ou Enter para lançar o dado.")
-            comando = input("Escolha: ").strip().upper()
+            comando = input("Pressiona enter para lançar o dado: ").strip().upper()
 
-        # Alínea (b): Salvar o estado atual para o disco
-        if comando == 'S':
+        if comando == 'S' or comando == 's ':
             return {
                 "p1_pos": p1_pos, "p2_pos": p2_pos, 
                 "p1_skip": p1_skip, "p2_skip": p2_skip, 
                 "turno": turno, "cpu": modo_cpu
             }
 
-        # Lógica de movimentação
         if atual_skip:
             print("⚠️ Estás preso! Perdes a vez.")
             if turno == 1: p1_skip = False
@@ -132,7 +126,6 @@ def jogo_da_gloria(save=None):
             if turno == 1: p1_pos = final_pos
             else: p2_pos = final_pos
 
-            # Alínea (d): Verificar vitória e retornar para pontuação cumulativa
             if final_pos == 63:
                 os.system('cls' if os.name == 'nt' else 'clear')
                 mostrar_tabuleiro(p1_pos, p2_pos)

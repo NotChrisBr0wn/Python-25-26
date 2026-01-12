@@ -62,7 +62,6 @@ def jogo_da_forca(save=None):
         erros = save['erros']
         modo = save.get('modo', 'cpu')
     else:
-        # --- ESCOLHA DE MODO (Alínea a) ---
         os.system('cls' if os.name == 'nt' else 'clear')
         print("=== JOGO DA FORCA ===")
         print("1. Contra Computador (Palavra Aleatória)")
@@ -73,7 +72,6 @@ def jogo_da_forca(save=None):
         
         if modo == '2p':
             import getpass
-            # getpass esconde a palavra enquanto é escrita
             palavra_secreta = getpass.getpass("Jogador 2, insira a palavra: ").strip().lower()
         else:
             diretorio_atual = os.path.dirname(__file__)
@@ -106,7 +104,7 @@ def jogo_da_forca(save=None):
         
         entrada = input("Letra: ").strip().lower()
 
-        if entrada == 's':
+        if entrada == 'S':
             return {
                 "palavra": palavra_secreta,
                 "tentadas": list(letras_adivinhadas),
@@ -135,5 +133,4 @@ def jogo_da_forca(save=None):
     print(BONECO[6])
     print(f"💀 GAME OVER! A palavra era: {palavra_secreta.upper()}")
     input("\nPrime Enter...")
-    # Se perder no modo 2P, o ponto vai para o Jogador 2. Se for CPU, vai para a CPU.
     return "vitoria_p2" if modo == '2p' else "vitoria_cpu"

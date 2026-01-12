@@ -3,12 +3,10 @@ import random
 import time
 
 def jogo_do_galo(save=None):
-    # --- INICIALIZAÇÃO / CARREGAMENTO (Alínea c) ---
     if save:
         tabuleiro = save['tabuleiro']
         p1_simbolo = save['p1_simbolo']
         modo_cpu = save['modo_cpu']
-        # Determina de quem é a vez com base no número de jogadas
         jogadas_feitas = sum(1 for x in tabuleiro if x in ['X', 'O'])
         simbolo_atual = 'X' if jogadas_feitas % 2 == 0 else 'O'
     else:
@@ -27,7 +25,7 @@ def jogo_do_galo(save=None):
                 break
             print("⚠️ Escolha inválida!")
         
-        simbolo_atual = 'X' # O X começa sempre no Galo
+        simbolo_atual = 'X'
 
     p2_simbolo = 'O' if p1_simbolo == 'X' else 'X'
 
@@ -50,11 +48,9 @@ def jogo_do_galo(save=None):
         v = [(0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6)]
         return any(tabuleiro[a] == tabuleiro[b] == tabuleiro[c] == s for a,b,c in v)
 
-    # --- CICLO PRINCIPAL ---
     while True:
         mostrar_tabuleiro()
         
-        # Lógica de Jogada (Humano vs CPU)
         if modo_cpu and simbolo_atual == p2_simbolo:
             print("Computador a pensar...")
             time.sleep(1)
@@ -62,7 +58,7 @@ def jogo_do_galo(save=None):
             pos = random.choice(posicoes_livres)
         else:
             jogada = input("Escolha (1-9): ").strip().upper()
-            if jogada == 'S': # Alínea b
+            if jogada == 'S' or jogada == 's':
                 return {
                     'tabuleiro': tabuleiro, 
                     'p1_simbolo': p1_simbolo, 
@@ -77,7 +73,6 @@ def jogo_do_galo(save=None):
 
         tabuleiro[pos] = simbolo_atual
 
-        # Verificar Fim de Jogo (Alínea d)
         if verificar_vitoria(simbolo_atual):
             mostrar_tabuleiro()
             if simbolo_atual == p1_simbolo:

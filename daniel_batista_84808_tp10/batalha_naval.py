@@ -13,9 +13,8 @@ def criar_tabuleiro(tamanho=5):
     return [["~" for _ in range(tamanho)] for _ in range(tamanho)]
 
 def mostrar_tabuleiro(tab, ocultar_barcos=False):
-    """Exibe o tabuleiro alinhado conforme a imagem enviada."""
-    print("\n      0   1   2   3   4") 
-    print("    " + "—" * 21)
+    print("\n       1  2  3  4  5") 
+    print("    " + "—" * 18)
     for i, linha in enumerate(tab):
         exibicao = []
         for celula in linha:
@@ -29,10 +28,10 @@ def mostrar_tabuleiro(tab, ocultar_barcos=False):
             elif celula == "*":
                 exibicao.append(f"{COR_MISS}⭕{RESET}")
         print(f"  {i} | " + " ".join(exibicao) + " |")
-    print("    " + "—" * 21)
+    print("    " + "—" * 18)
 
 def colocar_barcos(tab, nome, auto=False):
-    num = 3
+    num = 5
     count = 0
     while count < num:
         if auto:
@@ -42,11 +41,11 @@ def colocar_barcos(tab, nome, auto=False):
             print(f"=== {nome}: POSICIONE OS SEUS BARCOS ===")
             mostrar_tabuleiro(tab)
             try:
-                entrada = input(f"Barco {count+1}/3 (Linha Coluna): ").split()
+                entrada = input(f"Barco {count+1}/5 (Linha Coluna): ").split()
                 l, c = int(entrada[0]), int(entrada[1])
             except: continue
         
-        if 0 <= l < 5 and 0 <= c < 5 and tab[l][c] == "~":
+        if 0 <= l < 5 and 0 <= c < 5 and tab[l][c] == "~": # Verifica se a posição está livre
             tab[l][c] = "B"
             count += 1
 
@@ -85,7 +84,7 @@ def batalha_naval(save=None):
             print("\n(S) SALVAR E SAIR")
             escolha = input("Ataque (Linha Coluna): ").strip().upper()
 
-            if escolha == 'S':
+            if escolha == 'S' or escolha == 's':
                 return {"tab1": tab1, "tab2": tab2, "turno": turno, "modo": modo}
 
             try:
@@ -103,7 +102,6 @@ def batalha_naval(save=None):
         if sum(row.count("B") for row in tab_alvo) == 0:
             os.system('cls' if os.name == 'nt' else 'clear')
             print(f"🏆 VITÓRIA! {nome_atacante} venceu!")
-            # Retornos mapeados para o Menu (Alínea d)
             if turno == 1: return "vitoria_p1"
             return "vitoria_cpu" if modo == "1" else "vitoria_p2"
 

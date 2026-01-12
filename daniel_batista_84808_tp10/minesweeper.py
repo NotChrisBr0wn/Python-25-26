@@ -9,7 +9,6 @@ def minesweeper(save=None):
         real, visivel = save['real'], save['visivel']
         modo = save.get('modo', 'cpu')
     else:
-        # --- ESCOLHA DE MODO (Alínea a) ---
         os.system('cls' if os.name == 'nt' else 'clear')
         print("=== MINESWEEPER ===")
         print("1. Contra Computador (Bombas Aleatórias)")
@@ -59,7 +58,7 @@ def minesweeper(save=None):
         print("\n(S) SALVAR E SAIR")
         escolha = input("Revelar (Linha Coluna): ").strip().upper()
         
-        if escolha == 'S':
+        if escolha == 'S' or escolha == 's':
             return {"real": real, "visivel": visivel, "modo": modo}
 
         try:
